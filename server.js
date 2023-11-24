@@ -23,26 +23,31 @@ client.connect()
     console.error('Failed to connect to MongoDB', err);
   });
 
-// GET /data route
-app.get('/data', (req, res) => {
-  const id = req.query.id;
-
-  if (!id) {
-    return res.status(400).send('ID is required');
-  }
-
-  db.collection('data').findOne({ id: id }, (err, result) => {
-    if (err) {
+  app.get('/data', async (req, res) => {
+    try {
+      const id = req.query.id;
+  
+      if (!id) {
+        return res.status(400).send('ID is required');
+      }
+  
+      console.log('Querying ID:', id); // Debugging log
+  
+      // Adjust the query as needed based on your field name and data type
+      const result = await db.collection('data').findOne({ id: id });
+  
+      console.log('Query result:', result); // Debugging log
+  
+      if (!result) {
+        return res.status(404).send('Data not found');
+      }
+  
+      res.json(result);
+    } catch (err) {
+      console.error('Error fetching data', err);
       return res.status(500).send('Error fetching data');
     }
-
-    if (!result) {
-      return res.status(404).send('Data not found');
-    }
-
-    res.json(result);
   });
-});
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
