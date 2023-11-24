@@ -4,7 +4,7 @@ const { MongoClient } = require('mongodb');
 const app = express();
 const port = process.env.PORT || 3000;
 
-const uri = 'mongodb+srv://bigdickrick:DesertEagleM14EBR@cluster0.fmiikjs.mongodb.net';
+const uri = process.env.MONGODB_URL;
 const dbName = 'mongoai';
 
 // Connect to MongoDB
